@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #a2c2e8, #f7a072);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+            flex-direction: column;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-bottom: 2px solid #ddd;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #444;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            list-style-type: none;
+            display: flex;
+            gap: 25px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #444;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .nav-links a:hover {
+            background-color: #f7a072;
+            color: #fff;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input {
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            padding: 10px 20px;
+            outline: none;
+            font-size: 1rem;
+            margin-right: 10px;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .search-container .search-btn {
+            background-color: #f7a072;
+            border: none;
+            color: white;
+            padding: 10px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-container .search-btn:hover {
+            background-color: #d67f51;
+        }
+
+        /* Main Content */
+        .app-container {
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-top: 120px; /* Adjusted for the navigation bar */
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        #new-task-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            outline: none;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            color: #333;
+        }
+
+        #add-task-button {
+            background-color: #f7a072;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            padding: 15px;
+            font-size: 2rem;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #add-task-button:hover {
+            background-color: #d67f51;
+            transform: scale(1.1);
+        }
+
+        /* Task List */
+        #task-list {
+            list-style-type: none;
+            padding: 0;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .task-item:hover {
+            transform: scale(1.03);
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .task-item.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+            color: #999;
+        }
+
+        .delete-task {
+            background-color: transparent;
+            border: none;
+            color: #d67f51;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .delete-task:hover {
+            color: #f7a072;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">To-Do List</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Login</a></li>
+            <li class="search-container">
+                <input type="text" placeholder="Search...">
+                <button class="search-btn">🔍</button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="app-container">
+        <header>
+            <h1>My To-Do List</h1>
+        </header>
+        <div class="input-container">
+            <input type="text" id="new-task-input" placeholder="What you want to add?">
+            <button id="add-task-button">+</button>
+        </div>
+        <ul id="task-list"></ul>
+    </div>
+
+    <script>
+        document.getElementById('add-task-button').addEventListener('click', function() {
+            const taskInput = document.getElementById('new-task-input');
+            const taskText = taskInput.value.trim();
+
+            if (taskText !== '') {
+                addTask(taskText);
+                taskInput.value = ''; // Clear the input field
+            }
+        });
+
+        function addTask(taskText) {
+            const taskList = document.getElementById('task-list');
+
+            // Create list item
+            const taskItem = document.createElement('li');
+            taskItem.className = 'task-item';
+            taskItem.innerText = taskText;
+
+            // Create delete button
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-task';
+            deleteButton.innerHTML = '&times;';
+            deleteButton.addEventListener('click', function() {
+                taskList.removeChild(taskItem);
+            });
+
+            // Toggle task completion
+            taskItem.addEventListener('click', function() {
+                taskItem.classList.toggle('completed');
+            });
+
+            // Append delete button to list item
+            taskItem.appendChild(deleteButton);
+
+            // Append list item to task list
+            taskList.appendChild(taskItem);
+        }
+    </script>
+</body>
+</html>
